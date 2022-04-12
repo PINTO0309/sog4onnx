@@ -1,4 +1,4 @@
-# [WIP] sog4onnx
+# sog4onnx
 Simple ONNX operation generator. **S**imple **O**peration **G**enerator for **ONNX**.
 
 https://github.com/PINTO0309/simple-onnx-processing-tools
@@ -216,6 +216,7 @@ single_op_graph = generate(
 ```
 
 ## 6. Sample
+### 6-1. opset=1, Gemm
 ```bash
 $ sog4onnx \
 --op_type Gemm \
@@ -229,6 +230,19 @@ $ sog4onnx \
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163018526-f2d5c647-c3e9-4e65-9b9a-c1c4fa5da8a5.png)
 ![image](https://user-images.githubusercontent.com/33194443/163018647-a6880370-8772-4af1-9ffe-59820a621c30.png)
+
+### 6-2. opset=11, Add
+```bash
+$ sog4onnx \
+--op_type Add \
+--opset 11 \
+--input_variables i1 float32 [1,2,3] \
+--input_variables i2 float32 [1,2,3] \
+--output_variables o1 float32 [1,2,3] \
+--non_verbose
+```
+![image](https://user-images.githubusercontent.com/33194443/163042479-9998ba73-ee26-44ea-bd6b-dcd04539190b.png)
+![image](https://user-images.githubusercontent.com/33194443/163042529-5dbd1b5f-e8d1-47d0-8a9e-aacd91539c2b.png)
 
 ## 7. Reference
 1. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
