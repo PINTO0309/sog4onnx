@@ -123,10 +123,12 @@ generate(
         ONNX op type.
         See below for the types of OPs that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
+        
         e.g. "Add", "Div", "Gemm", ...
     
     opset: int
         ONNX opset number.
+        
         e.g. 11
     
     input_variables: Optional[dict]
@@ -134,6 +136,7 @@ generate(
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}
+        
         e.g.
         input_variables = {
           "name1": [np.float32, [1,224,224,3]],
@@ -146,6 +149,7 @@ generate(
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}
+        
         e.g.
         output_variables = {
           "name1": [np.float32, [1,224,224,3]],
@@ -158,6 +162,7 @@ generate(
         See below for the attributes that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}
+        
         e.g.
         attributes = {
           "alpha": 1.0,
