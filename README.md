@@ -130,8 +130,8 @@ generate(
         {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}
         e.g.
         input_variables = {
-          'name1': [np.float32, [1,224,224,3]],
-          'name2': [np.bool_, [0]],
+          "name1": [np.float32, [1,224,224,3]],
+          "name2": [np.bool_, [0]],
           ...
         }
     
@@ -142,8 +142,8 @@ generate(
         {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}
         e.g.
         output_variables = {
-          'name1': [np.float32, [1,224,224,3]],
-          'name2': [np.bool_, [0]],
+          "name1": [np.float32, [1,224,224,3]],
+          "name2": [np.bool_, [0]],
           ...
         }
     
@@ -152,7 +152,13 @@ generate(
         See below for the attributes that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}
-        e.g. attributes = {"alpha": 1.0, "beta": 1.0, "transA": 0, "transB": 0}
+        e.g.
+        attributes = {
+          "alpha": 1.0,
+          "beta": 1.0,
+          "transA": 0,
+          "transB": 0
+        }
         Default: None
     
     output_onnx_file_path: Optional[str]
