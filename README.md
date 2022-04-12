@@ -11,6 +11,7 @@ https://github.com/PINTO0309/simple-onnx-processing-tools
 - [x] Allow Opset to be specified externally.
 - [x] No check for consistency of Operations within the tool, as new OPs are added frequently and the definitions of existing OPs change with each new version of ONNX's Opset.
 - [x] Only one OP can be defined at a time, and the goal is to generate free ONNX graphs using a combination of **[snc4onnx](https://github.com/PINTO0309/snc4onnx)**, **[sne4onnx](https://github.com/PINTO0309/sne4onnx)**, **[snd4onnx](https://github.com/PINTO0309/snd4onnx)** and **[scs4onnx](https://github.com/PINTO0309/scs4onnx)**.
+- [x] List of parameters that can be specified: https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
 ## 6. Sample
 ```bash
