@@ -13,12 +13,13 @@ Simple ONNX operation generator. **S**imple **O**peration **G**enerator for **ON
 $ sog4onnx \
 --op_type Gemm \
 --opset 11 \
---input_variables in1 np.float32 [1,2,3] \
---input_variables in2 np.float32 [1,1] \
---input_variables in3 np.float32 0 \
+--input_variables i1 np.float32 [1,2,3] \
+--input_variables i2 np.float32 [1,1] \
+--input_variables i3 np.float32 0 \
 --output_variables out1 float32 [1,2,3] \
 --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
 ```
+![image](https://user-images.githubusercontent.com/33194443/163012020-0ee8e0f9-be9d-4954-b080-6c2762ce54e7.png)
 
 ## 7. Reference
 1. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
