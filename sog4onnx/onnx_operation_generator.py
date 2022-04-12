@@ -37,8 +37,8 @@ class Color:
 def generate(
     op_type: str,
     opset: int,
-    input_variables: dict,
-    output_variables: dict,
+    input_variables: Optional[dict] = None,
+    output_variables: Optional[dict] = None,
     attributes: Optional[dict] = None,
     output_onnx_file_path: Optional[str] = '',
     non_verbose: Optional[bool] = False,
@@ -182,7 +182,6 @@ def main():
     parser.add_argument(
         '--input_variables',
         type=str,
-        required=True,
         nargs='+',
         action='append',
         help=\
@@ -197,7 +196,6 @@ def main():
     parser.add_argument(
         '--output_variables',
         type=str,
-        required=True,
         nargs='+',
         action='append',
         help=\
@@ -240,13 +238,17 @@ def main():
     """
     input_variables_tmp = {'name': [dtype, shape]}
     """
-    input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), eval(input_variable[2])] for input_variable in args.input_variables}
+    input_variables_tmp = None
+    if args.input_variables:
+        input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), eval(input_variable[2])] for input_variable in args.input_variables}
 
     # output variables
     """
     output_variables_tmp = {'name': [dtype, shape]}
     """
-    output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
+    output_variables_tmp = None
+    if args.output_variables:
+        output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
 
     # output_onnx_file_path
     output_onnx_file_path = ''
