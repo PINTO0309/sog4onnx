@@ -102,7 +102,9 @@ def generate(
         Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
     ]
     """
-    input_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()]
+    input_gs_variables = None
+    if input_variables:
+        input_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()]
 
     """
     output_gs_variables
@@ -112,7 +114,9 @@ def generate(
         Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
     ]
     """
-    output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
+    output_gs_variables = None
+    if output_variables:
+        output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
 
     # 2. Node Generation
     node = gs.Node(
