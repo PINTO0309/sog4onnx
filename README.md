@@ -3,6 +3,8 @@ Simple ONNX operation generator. **S**imple **O**peration **G**enerator for **ON
 
 https://github.com/PINTO0309/simple-onnx-processing-tools
 
+[![Downloads](https://static.pepy.tech/personalized-badge/sog4onnx?period=total&units=none&left_color=grey&right_color=brightgreen&left_text=Downloads)](https://pepy.tech/project/sog4onnx) ![GitHub](https://img.shields.io/github/license/PINTO0309/sog4onnx?color=2BAF2B) [![PyPI](https://img.shields.io/pypi/v/sog4onnx?color=2BAF2B)](https://pypi.org/project/sog4onnx/) [![CodeQL](https://github.com/PINTO0309/sog4onnx/workflows/CodeQL/badge.svg)](https://github.com/PINTO0309/sog4onnx/actions?query=workflow%3ACodeQL)
+
 # Key concept
 
 - [x] Variable, Constant, Operation and Attribute can be generated externally.
