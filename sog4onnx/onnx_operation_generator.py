@@ -48,9 +48,9 @@ def generate(
     ----------
     op_type: str
         ONNX op type.\n\
-        See below for the types of OPs that can be specified.\n\
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
-        e.g. "Add", "Div", "Gemm", ...
+        See below for the types of OPs that can be specified.\n\n\
+        e.g. "Add", "Div", "Gemm", ...\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
     opset: int
         ONNX opset number.\n\
@@ -58,25 +58,25 @@ def generate(
 
     input_variables: Optional[dict]
         Specify input variables for the OP to be generated.\n\
-        See below for the variables that can be specified.\n\
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
-        {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}\n\
-        e.g. input_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+        See below for the variables that can be specified.\n\n\
+        {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}\n\n\
+        e.g. input_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
     output_variables: Optional[dict]
         Specify output variables for the OP to be generated.\n\
-        See below for the variables that can be specified.\n\
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
-        {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}\n\
-        e.g. output_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+        See below for the variables that can be specified.\n\n\
+        {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}\n\n\
+        e.g. output_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
     attributes: Optional[dict]
         Specify output attributes for the OP to be generated.\n\
-        See below for the attributes that can be specified.\n\
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
-        {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}\n\
+        See below for the attributes that can be specified.\n\n\
+        {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}\n\n\
         e.g. attributes = {"alpha": 1.0, "beta": 1.0, "transA": 0, "transB": 0}\n\
-        Default: None
+        Default: None\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
     output_onnx_file_path: Optional[str]
         Output of onnx file path.\n\
