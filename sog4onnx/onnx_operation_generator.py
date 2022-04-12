@@ -38,8 +38,125 @@ class Color:
     RESET          = '\033[0m'
 
 
-def generate():
-    pass
+def generate(
+    op_type: str,
+    opset: int,
+    input_variables: dict,
+    output_variables: dict,
+    attributes: Optional[dict] = None,
+    output_onnx_file_path: Optional[str] = '',
+    non_verbose: Optional[bool] = False,
+) -> onnx.ModelProto:
+    """
+    Parameters
+    ----------
+    op_type: str
+        ONNX op type.\n\
+        See below for the types of OPs that can be specified.\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
+        e.g. "Add", "Div", "Gemm", ...
+
+    opset: int
+        ONNX opset number.\n\
+        e.g. 11
+
+    input_variables: Optional[dict]
+        Specify input variables for the OP to be generated.\n\
+        See below for the variables that can be specified.\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
+        {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}\n\
+        e.g. input_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+
+    output_variables: Optional[dict]
+        Specify output variables for the OP to be generated.\n\
+        See below for the variables that can be specified.\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
+        {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}\n\
+        e.g. output_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+
+    attributes: Optional[dict]
+        Specify output attributes for the OP to be generated.\n\
+        See below for the attributes that can be specified.\n\
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md\n\
+        {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}\n\
+        e.g. attributes = {"alpha": 1.0, "beta": 1.0, "transA": 0, "transB": 0}\n\
+        Default: None
+
+    output_onnx_file_path: Optional[str]
+        Output of onnx file path.\n\
+        If not specified, no .onnx file is output.\n\
+        Default: ''
+
+    non_verbose: Optional[bool]
+        Do not show all information logs. Only error logs are displayed.\n\
+        Default: False
+
+    Returns
+    -------
+    single_op_graph: onnx.ModelProto
+        Single op onnx ModelProto
+    """
+
+    # 1. Parameter parsing
+    """
+    input_gs_variables
+    [
+        Variable (i1): (shape=[1, 2, 3], dtype=<class 'numpy.float32'>),
+        Variable (i2): (shape=[1, 1], dtype=<class 'numpy.float32'>),
+        Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
+    ]
+    """
+    input_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()]
+
+    """
+    output_gs_variables
+    [
+        Variable (i1): (shape=[1, 2, 3], dtype=<class 'numpy.float32'>),
+        Variable (i2): (shape=[1, 1], dtype=<class 'numpy.float32'>),
+        Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
+    ]
+    """
+    output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
+
+    # 2. Node Generation
+    node = gs.Node(
+        op=op_type,
+        attrs=attributes,
+        inputs=input_gs_variables,
+        outputs=output_gs_variables
+    )
+
+    # 3. Graph Generation
+    graph = gs.Graph(
+        nodes=[node],
+        inputs=input_gs_variables,
+        outputs=output_gs_variables,
+        opset=opset,
+    )
+    model_def = gs.export_onnx(graph)
+
+    # 4. Graph Check
+    try:
+        onnx.checker.check_model(
+            model=model_def,
+            full_check=False
+        )
+        if not non_verbose:
+            print(f'{Color.GREEN}INFO:{Color.RESET} The model is checked!')
+
+    except Exception as e:
+        tracetxt = traceback.format_exc().splitlines()[-1]
+        print(f'{Color.RED}ERROR:{Color.RESET} {tracetxt}')
+
+    single_op_graph = gs.export_onnx(graph)
+
+    # 5. Save
+    if output_onnx_file_path:
+        onnx.save(single_op_graph, output_onnx_file_path)
+
+    # 6. Return
+    return single_op_graph
+
 
 def main():
     # https://github.com/onnx/onnx/blob/main/docs/Operators.md
@@ -82,17 +199,6 @@ def main():
             '--input_variables i3 float64 [1,3,224,224]'
     )
     parser.add_argument(
-        '--attributes',
-        type=json.loads,
-        help=\
-            'attributes can be specified multiple times. \n'+
-            'The key name is a string and the delimiter is double-cotation marks. \n'+
-            'Note that double-cotation marks must be escaped with a backslash. \n'+
-            '--attributes {"attribute_name1": value1, "attribute_name2": value2, ...} \n\n'+
-            'e.g.\n'+
-            '--attributes "{\\"alpha\\": 1.0, \\"beta\\": 1.0, \\"transA\\": 0, \\"transB\\": 0}"'
-    )
-    parser.add_argument(
         '--output_variables',
         type=str,
         required=True,
@@ -107,6 +213,17 @@ def main():
             '--output_variables o3 float64 [1,3,224,224]'
     )
     parser.add_argument(
+        '--attributes',
+        type=json.loads,
+        help=\
+            'attributes can be specified multiple times. \n'+
+            'The key name is a string and the delimiter is double-cotation marks. \n'+
+            'Note that double-cotation marks must be escaped with a backslash. \n'+
+            '--attributes {"attribute_name1": value1, "attribute_name2": value2, ...} \n\n'+
+            'e.g.\n'+
+            '--attributes "{\\"alpha\\": 1.0, \\"beta\\": 1.0, \\"transA\\": 0, \\"transB\\": 0}"'
+    )
+    parser.add_argument(
         '--output_onnx_file_path',
         type=str,
         default='',
@@ -114,73 +231,43 @@ def main():
             'Output onnx file path. If not specified, a file with the OP type name is generated.'+
             'e.g. op_type="Gemm" -> Gemm.onnx'
     )
+    parser.add_argument(
+        '--non_verbose',
+        action='store_true',
+        help='Do not show all information logs. Only error logs are displayed.'
+    )
     args = parser.parse_args()
-    from pprint import pprint
 
-    # 1. Parameter parsing
-    ## input variables
+    # input variables
     """
-    input_variables = {'name': [dtype, shape]}
+    input_variables_tmp = {'name': [dtype, shape]}
     """
-    input_variables = {input_variable[0]: [getattr(np, input_variable[1]), eval(input_variable[2])] for input_variable in args.input_variables}
-    """
-    input_gs_variables
-    [
-        Variable (i1): (shape=[1, 2, 3], dtype=<class 'numpy.float32'>),
-        Variable (i2): (shape=[1, 1], dtype=<class 'numpy.float32'>),
-        Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
-    ]
-    """
-    input_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()]
+    input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), eval(input_variable[2])] for input_variable in args.input_variables}
 
-    ## output variables
+    # output variables
     """
-    output_variables = {'name': [dtype, shape]}
+    output_variables_tmp = {'name': [dtype, shape]}
     """
-    output_variables = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
-    """
-    output_gs_variables
-    [
-        Variable (i1): (shape=[1, 2, 3], dtype=<class 'numpy.float32'>),
-        Variable (i2): (shape=[1, 1], dtype=<class 'numpy.float32'>),
-        Variable (i3): (shape=[0], dtype=<class 'numpy.int32'>)
-    ]
-    """
-    output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
+    output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
 
-    # 2. Node Generation
-    node = gs.Node(
-        op=args.op_type,
-        attrs=args.attributes,
-        inputs=input_gs_variables,
-        outputs=output_gs_variables
-    )
-
-    # 3. Graph Generation
-    graph = gs.Graph(
-        nodes=[node],
-        inputs=input_gs_variables,
-        outputs=output_gs_variables,
-        opset=args.opset,
-    )
-    model_def = gs.export_onnx(graph)
-
-    # 4. Graph Check
-    try:
-        onnx.checker.check_model(
-            model=model_def,
-            full_check=False
-        )
-        print(f'{Color.GREEN}INFO:{Color.RESET} The model is checked!')
-    except Exception as e:
-        tracetxt = traceback.format_exc().splitlines()[-1]
-        print(f'{Color.RED}ERROR:{Color.RESET} {tracetxt}')
-
-    # 5. Save
+    # output_onnx_file_path
+    output_onnx_file_path = ''
     if args.output_onnx_file_path:
-        onnx.save(gs.export_onnx(graph), args.output_onnx_file_path)
+        output_onnx_file_path = args.output_onnx_file_path
     else:
-        onnx.save(gs.export_onnx(graph), f"{args.op_type}.onnx")
+        output_onnx_file_path = f'{args.op_type}.onnx'
+
+    # Generate
+    single_op_graph = generate(
+        op_type=args.op_type,
+        opset=args.opset,
+        input_variables=input_variables_tmp,
+        output_variables=output_variables_tmp,
+        attributes=args.attributes,
+        output_onnx_file_path=output_onnx_file_path,
+        non_verbose=args.non_verbose,
+    )
+
 
 if __name__ == '__main__':
     main()
