@@ -17,7 +17,7 @@ https://github.com/PINTO0309/simple-onnx-processing-tools
 ```bash
 $ sog4onnx \
 --op_type Gemm \
---opset 11 \
+--opset 1 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
@@ -25,7 +25,8 @@ $ sog4onnx \
 --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"broadcast\": 0, \"transA\": 0, \"transB\": 0}" \
 --non_verbose
 ```
-![image](https://user-images.githubusercontent.com/33194443/163012020-0ee8e0f9-be9d-4954-b080-6c2762ce54e7.png)
+![image](https://user-images.githubusercontent.com/33194443/163018526-f2d5c647-c3e9-4e65-9b9a-c1c4fa5da8a5.png)
+![image](https://user-images.githubusercontent.com/33194443/163018647-a6880370-8772-4af1-9ffe-59820a621c30.png)
 
 ## 7. Reference
 1. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
