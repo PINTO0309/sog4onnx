@@ -128,14 +128,24 @@ generate(
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}
-        e.g. input_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+        e.g.
+        input_variables = {
+          'name1': [np.float32, [1,224,224,3]],
+          'name2': [np.bool_, [0]],
+          ...
+        }
     
     output_variables: Optional[dict]
         Specify output variables for the OP to be generated.
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}
-        e.g. output_variables = {'name1': [np.float32, [1,224,224,3]], 'name2': [np.bool_, [0]], ...}
+        e.g.
+        output_variables = {
+          'name1': [np.float32, [1,224,224,3]],
+          'name2': [np.bool_, [0]],
+          ...
+        }
     
     attributes: Optional[dict]
         Specify output attributes for the OP to be generated.
