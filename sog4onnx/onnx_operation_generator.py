@@ -160,14 +160,15 @@ def generate(
 
 def main():
     # https://github.com/onnx/onnx/blob/main/docs/Operators.md
-
     parser = ArgumentParser()
     parser.add_argument(
         '--op_type',
         type=str,
         required=True,
         default='',
-        help='ONNX OP type. https://github.com/onnx/onnx/blob/main/docs/Operators.md'
+        help=\
+            'ONNX OP type. \n'+
+            'https://github.com/onnx/onnx/blob/main/docs/Operators.md'
     )
     parser.add_argument(
         '--opset',
@@ -192,7 +193,8 @@ def main():
         action='append',
         help=\
             'input_variables can be specified multiple times. \n'+
-            '--input_variables variable_name numpy.dtype shape \n\n'+
+            '--input_variables variable_name numpy.dtype shape \n'+
+            'https://github.com/onnx/onnx/blob/main/docs/Operators.md \n\n'+
             'e.g.\n'+
             '--input_variables i1 float32 [1,3,5,5] \n'+
             '--input_variables i2 int32 [1] \n'+
@@ -206,7 +208,8 @@ def main():
         action='append',
         help=\
             'output_variables can be specified multiple times. \n'+
-            '--output_variables variable_name numpy.dtype shape \n\n'+
+            '--output_variables variable_name numpy.dtype shape \n'+
+            'https://github.com/onnx/onnx/blob/main/docs/Operators.md \n\n'+
             'e.g.\n'+
             '--output_variables o1 float32 [1,3,5,5] \n'+
             '--output_variables o2 int32 [1] \n'+
@@ -219,7 +222,8 @@ def main():
             'attributes can be specified multiple times. \n'+
             'The key name is a string and the delimiter is double-cotation marks. \n'+
             'Note that double-cotation marks must be escaped with a backslash. \n'+
-            '--attributes {"attribute_name1": value1, "attribute_name2": value2, ...} \n\n'+
+            '--attributes {"attribute_name1": value1, "attribute_name2": value2, ...} \n'+
+            'https://github.com/onnx/onnx/blob/main/docs/Operators.md \n\n'+
             'e.g.\n'+
             '--attributes "{\\"alpha\\": 1.0, \\"beta\\": 1.0, \\"transA\\": 0, \\"transB\\": 0}"'
     )
