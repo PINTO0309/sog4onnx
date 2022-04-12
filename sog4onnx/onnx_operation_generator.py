@@ -1,16 +1,12 @@
 #! /usr/bin/env python
 
-import sys
-import os
 import json
 import traceback
 from argparse import ArgumentParser
 import onnx
 import onnx_graphsurgeon as gs
 import numpy as np
-from onnx_graphsurgeon.ir.tensor import Constant
-from onnxsim import simplify
-from typing import Dict, Optional, List
+from typing import Optional
 
 class Color:
     BLACK          = '\033[30m'
