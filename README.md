@@ -17,9 +17,9 @@ $ sog4onnx \
 --opset 11 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,1] \
---input_variables i3 int32 0 \
+--input_variables i3 int32 [0] \
 --output_variables o1 float32 [1,2,3] \
---attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
+--attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"broadcast\": 0, \"transA\": 0, \"transB\": 0}"
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163012020-0ee8e0f9-be9d-4954-b080-6c2762ce54e7.png)
 
