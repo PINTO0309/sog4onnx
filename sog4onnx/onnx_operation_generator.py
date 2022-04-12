@@ -133,12 +133,12 @@ def generate(
         outputs=output_gs_variables,
         opset=opset,
     )
-    model_def = gs.export_onnx(graph)
+    single_op_graph = gs.export_onnx(graph)
 
     # 4. Graph Check
     try:
         onnx.checker.check_model(
-            model=model_def,
+            model=single_op_graph,
             full_check=False
         )
         if not non_verbose:
@@ -147,8 +147,6 @@ def generate(
     except Exception as e:
         tracetxt = traceback.format_exc().splitlines()[-1]
         print(f'{Color.RED}ERROR:{Color.RESET} {tracetxt}')
-
-    single_op_graph = gs.export_onnx(graph)
 
     # 5. Save
     if output_onnx_file_path:
