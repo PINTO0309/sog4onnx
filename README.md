@@ -220,7 +220,7 @@ single_op_graph = generate(
       "broadcast": 0,
       "transA": 0,
       "transB": 0,
-    }
+    },
     non_verbose = True,
 )
 ```
