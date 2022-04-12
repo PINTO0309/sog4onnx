@@ -56,7 +56,8 @@ optional arguments:
         show this help message and exit
 
   --op_type OP_TYPE
-        ONNX OP type. https://github.com/onnx/onnx/blob/main/docs/Operators.md
+        ONNX OP type.
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
   --opset OPSET
         ONNX opset number.
