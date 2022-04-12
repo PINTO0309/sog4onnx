@@ -65,7 +65,9 @@ optional arguments:
   --input_variables INPUT_VARIABLES [INPUT_VARIABLES ...]
         input_variables can be specified multiple times.
         --input_variables variable_name numpy.dtype shape
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md e.g.
+        https://github.com/onnx/onnx/blob/main/docs/Operators.md
+        
+        e.g.
         --input_variables i1 float32 [1,3,5,5]
         --input_variables i2 int32 [1]
         --input_variables i3 float64 [1,3,224,224]
@@ -74,6 +76,7 @@ optional arguments:
         output_variables can be specified multiple times.
         --output_variables variable_name numpy.dtype shape
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
+        
         e.g.
         --output_variables o1 float32 [1,3,5,5]
         --output_variables o2 int32 [1]
@@ -85,10 +88,12 @@ optional arguments:
         Note that double-cotation marks must be escaped with a backslash.
         --attributes {"attribute_name1": value1, "attribute_name2": value2, ...}
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
+        
         e.g. --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
 
   --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
         Output onnx file path. If not specified, a file with the OP type name is generated.
+        
         e.g. op_type="Gemm" -> Gemm.onnx
 
   --non_verbose
