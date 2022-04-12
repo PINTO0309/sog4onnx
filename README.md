@@ -15,7 +15,7 @@ $ sog4onnx \
 --opset 11 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,1] \
---input_variables i3 float32 0 \
+--input_variables i3 int32 0 \
 --output_variables o1 float32 [1,2,3] \
 --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
 ```
