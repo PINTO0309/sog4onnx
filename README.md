@@ -94,7 +94,8 @@ optional arguments:
         --attributes transB 0
 
   --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
-        Output onnx file path. If not specified, a file with the OP type name is generated.
+        Output onnx file path.
+        If not specified, a file with the OP type name is generated.
 
         e.g. op_type="Gemm" -> Gemm.onnx
 
