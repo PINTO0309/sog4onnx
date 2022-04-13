@@ -137,7 +137,7 @@ generate(
         Specify input variables for the OP to be generated.
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}
+        {"input_var_name1": [numpy.dtype, shape], "input_var_name2": [dtype, shape], ...}
 
         e.g.
         input_variables = {
@@ -150,7 +150,7 @@ generate(
         Specify output variables for the OP to be generated.
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}
+        {"output_var_name1": [numpy.dtype, shape], "output_var_name2": [dtype, shape], ...}
 
         e.g.
         output_variables = {
@@ -163,7 +163,7 @@ generate(
         Specify output attributes for the OP to be generated.
         See below for the attributes that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}
+        {"attr_name1": value1, "attr_name2": value2, "attr_name3": value3, ...}
 
         e.g.
         attributes = {
