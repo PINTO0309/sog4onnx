@@ -186,7 +186,7 @@ def main():
     parser.add_argument(
         '--input_variables',
         type=str,
-        nargs='+',
+        nargs=3,
         action='append',
         help=\
             'input_variables can be specified multiple times. \n'+
@@ -200,7 +200,7 @@ def main():
     parser.add_argument(
         '--output_variables',
         type=str,
-        nargs='+',
+        nargs=3,
         action='append',
         help=\
             'output_variables can be specified multiple times. \n'+
@@ -213,15 +213,17 @@ def main():
     )
     parser.add_argument(
         '--attributes',
-        type=json.loads,
+        nargs=2,
+        action='append',
         help=\
             'attributes can be specified multiple times. \n'+
-            'The key name is a string and the delimiter is double-cotation marks. \n'+
-            'Note that double-cotation marks must be escaped with a backslash. \n'+
-            '--attributes {"attribute_name1": value1, "attribute_name2": value2, ...} \n'+
+            '--attributes name value \n'+
             'https://github.com/onnx/onnx/blob/main/docs/Operators.md \n\n'+
             'e.g.\n'+
-            '--attributes "{\\"alpha\\": 1.0, \\"beta\\": 1.0, \\"transA\\": 0, \\"transB\\": 0}"'
+            '--attributes alpha 1.0 \n'+
+            '--attributes beta 1.0 \n'+
+            '--attributes transA 0 \n'+
+            '--attributes transB 0'
     )
     parser.add_argument(
         '--output_onnx_file_path',
@@ -254,6 +256,14 @@ def main():
     if args.output_variables:
         output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
 
+    # attributes
+    """
+    attributes_tmp = {'name': value}
+    """
+    attributes_tmp = None
+    if args.attributes:
+        attributes_tmp = {attribute[0]: eval(attribute[1]) for attribute in args.attributes}
+
     # output_onnx_file_path
     output_onnx_file_path = ''
     if args.output_onnx_file_path:
@@ -267,7 +277,7 @@ def main():
         opset=args.opset,
         input_variables=input_variables_tmp,
         output_variables=output_variables_tmp,
-        attributes=args.attributes,
+        attributes=attributes_tmp,
         output_onnx_file_path=output_onnx_file_path,
         non_verbose=args.non_verbose,
     )

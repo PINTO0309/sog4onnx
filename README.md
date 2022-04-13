@@ -45,9 +45,9 @@ $ sog4onnx -h
 usage: sog4onnx [-h]
   --op_type OP_TYPE
   --opset OPSET
-  --input_variables INPUT_VARIABLES [INPUT_VARIABLES ...]
-  --output_variables OUTPUT_VARIABLES [OUTPUT_VARIABLES ...]
-  [--attributes ATTRIBUTES]
+  [--input_variables NAME TYPE VALUE]
+  [--output_variables NAME TYPE VALUE]
+  [--attributes NAME VALUE]
   [--output_onnx_file_path OUTPUT_ONNX_FILE_PATH]
   [--non_verbose]
 
@@ -62,38 +62,40 @@ optional arguments:
   --opset OPSET
         ONNX opset number.
 
-  --input_variables INPUT_VARIABLES [INPUT_VARIABLES ...]
+  --input_variables NAME TYPE VALUE
         input_variables can be specified multiple times.
         --input_variables variable_name numpy.dtype shape
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        
+
         e.g.
-        --input_variables i1 float32 [1,3,5,5]
-        --input_variables i2 int32 [1]
+        --input_variables i1 float32 [1,3,5,5] \
+        --input_variables i2 int32 [1] \
         --input_variables i3 float64 [1,3,224,224]
 
-  --output_variables OUTPUT_VARIABLES [OUTPUT_VARIABLES ...]
+  --output_variables NAME TYPE VALUE
         output_variables can be specified multiple times.
         --output_variables variable_name numpy.dtype shape
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        
+
         e.g.
-        --output_variables o1 float32 [1,3,5,5]
-        --output_variables o2 int32 [1]
+        --output_variables o1 float32 [1,3,5,5] \
+        --output_variables o2 int32 [1] \
         --output_variables o3 float64 [1,3,224,224]
 
-  --attributes ATTRIBUTES
+  --attributes NAME VALUE
         attributes can be specified multiple times.
-        The key name is a string and the delimiter is double-cotation marks.
-        Note that double-cotation marks must be escaped with a backslash.
-        --attributes {"attribute_name1": value1, "attribute_name2": value2, ...}
+        --attributes name value
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        
-        e.g. --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
+
+        e.g.
+        --attributes alpha 1.0 \
+        --attributes beta 1.0 \
+        --attributes transA 0 \
+        --attributes transB 0
 
   --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
         Output onnx file path. If not specified, a file with the OP type name is generated.
-        
+
         e.g. op_type="Gemm" -> Gemm.onnx
 
   --non_verbose
@@ -123,46 +125,46 @@ generate(
         ONNX op type.
         See below for the types of OPs that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
-        
+
         e.g. "Add", "Div", "Gemm", ...
-    
+
     opset: int
         ONNX opset number.
-        
+
         e.g. 11
-    
+
     input_variables: Optional[dict]
         Specify input variables for the OP to be generated.
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'input_var_name1': [numpy.dtype, shape], 'input_var_name2': [dtype, shape], ...}
-        
+
         e.g.
         input_variables = {
           "name1": [np.float32, [1,224,224,3]],
           "name2": [np.bool_, [0]],
           ...
         }
-    
+
     output_variables: Optional[dict]
         Specify output variables for the OP to be generated.
         See below for the variables that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'output_var_name1': [numpy.dtype, shape], 'output_var_name2': [dtype, shape], ...}
-        
+
         e.g.
         output_variables = {
           "name1": [np.float32, [1,224,224,3]],
           "name2": [np.bool_, [0]],
           ...
         }
-    
+
     attributes: Optional[dict]
         Specify output attributes for the OP to be generated.
         See below for the attributes that can be specified.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {'attr_name1': value1, 'attr_name2': value2, 'attr_name3': value3, ...}
-        
+
         e.g.
         attributes = {
           "alpha": 1.0,
@@ -171,16 +173,16 @@ generate(
           "transB": 0
         }
         Default: None
-    
+
     output_onnx_file_path: Optional[str]
         Output of onnx file path.
         If not specified, no .onnx file is output.
         Default: ''
-    
+
     non_verbose: Optional[bool]
         Do not show all information logs. Only error logs are displayed.
         Default: False
-    
+
     Returns
     -------
     single_op_graph: onnx.ModelProto
@@ -196,7 +198,10 @@ $ sog4onnx \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
 --output_variables o1 float32 [1,2,3] \
---attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"broadcast\": 0, \"transA\": 0, \"transB\": 0}"
+--attributes alpha 1.0 \
+--attributes beta 1.0 \
+--attributes transA 0 \
+--attributes transB 0
 ```
 
 ## 5. In-script Execution
@@ -235,7 +240,10 @@ $ sog4onnx \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
 --output_variables o1 float32 [1,2,3] \
---attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"broadcast\": 0, \"transA\": 0, \"transB\": 0}" \
+--attributes alpha 1.0 \
+--attributes beta 1.0 \
+--attributes transA 0 \
+--attributes transB 0
 --non_verbose
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163018526-f2d5c647-c3e9-4e65-9b9a-c1c4fa5da8a5.png)
