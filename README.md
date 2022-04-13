@@ -255,10 +255,11 @@ $ sog4onnx \
 ![image](https://user-images.githubusercontent.com/33194443/163042529-5dbd1b5f-e8d1-47d0-8a9e-aacd91539c2b.png)
 
 ## 7. Reference
-1. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
-2. https://github.com/NVIDIA/TensorRT/tree/main/tools/onnx-graphsurgeon
-3. https://github.com/PINTO0309/sne4onnx
-4. https://github.com/PINTO0309/snd4onnx
-5. https://github.com/PINTO0309/snc4onnx
-6. https://github.com/PINTO0309/scs4onnx
-7. https://github.com/PINTO0309/PINTO_model_zoo
+1. https://github.com/onnx/onnx/blob/main/docs/Operators.md
+2. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
+3. https://github.com/NVIDIA/TensorRT/tree/main/tools/onnx-graphsurgeon
+4. https://github.com/PINTO0309/sne4onnx
+5. https://github.com/PINTO0309/snd4onnx
+6. https://github.com/PINTO0309/snc4onnx
+7. https://github.com/PINTO0309/scs4onnx
+8. https://github.com/PINTO0309/PINTO_model_zoo
