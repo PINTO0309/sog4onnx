@@ -286,7 +286,7 @@ $ sog4onnx \
 $ sog4onnx \
 --op_type Constant \
 --opset 11 \
---output_variables output float32 [1,6,4] \
+--output_variables boxes float32 [1,6,4] \
 --attributes value float32 \
 [[\
 [0.5,0.5,1.0,1.0],\
@@ -297,7 +297,7 @@ $ sog4onnx \
 [0.5,100.5,1.0,1.0]\
 ]]
 ```
-![image](https://user-images.githubusercontent.com/33194443/163309028-ef1885be-853c-4620-a27f-d70c48fff26f.png)
+![image](https://user-images.githubusercontent.com/33194443/163311192-b559134f-d42d-4119-8990-0f7ac63230e3.png)
 
 ## 7. Reference
 1. https://github.com/onnx/onnx/blob/main/docs/Operators.md

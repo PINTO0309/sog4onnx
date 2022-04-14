@@ -166,17 +166,18 @@ def generate(
             else:
                 dtype = DTYPES_TO_ONNX_DTYPES[type(attr_values)]
 
+            constant_name = [i for i in output_variables.keys()][0]
             value_info = onnx.helper.make_tensor_value_info(
-                'values',
+                constant_name,
                 dtype,
                 attr_values.shape
             )
             node = onnx.helper.make_node(
                 op_type,
                 inputs=[],
-                outputs=['values'],
+                outputs=[constant_name],
                 value=onnx.helper.make_tensor(
-                    name=attr_name,
+                    name='value',
                     data_type=dtype,
                     dims=attr_values.shape,
                     vals=attr_values,
