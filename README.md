@@ -276,7 +276,7 @@ $ sog4onnx \
 --input_variables iou_threshold float32 [1] \
 --input_variables score_threshold float32 [1] \
 --output_variables selected_indices int64 [3,3] \
---attributes center_point_box 1
+--attributes center_point_box int64 1
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163291737-8bd7ad7e-f9e5-4ce9-a8ba-444f1a8e77bb.png)
 ![image](https://user-images.githubusercontent.com/33194443/163291789-59e4e5c8-26f4-4971-ab22-1486093f1be0.png)
