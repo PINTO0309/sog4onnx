@@ -47,7 +47,7 @@ usage: sog4onnx [-h]
   --opset OPSET
   [--input_variables NAME TYPE VALUE]
   [--output_variables NAME TYPE VALUE]
-  [--attributes NAME VALUE]
+  [--attributes NAME DTYPE VALUE]
   [--output_onnx_file_path OUTPUT_ONNX_FILE_PATH]
   [--non_verbose]
 
@@ -82,16 +82,17 @@ optional arguments:
         --output_variables o2 int32 [1] \
         --output_variables o3 float64 [1,3,224,224]
 
-  --attributes NAME VALUE
+  --attributes NAME DTYPE VALUE
         attributes can be specified multiple times.
-        --attributes name value
+        dtype is one of "float32" or "float64" or "int32" or "int64" or "str".
+        --attributes name dtype value
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
         e.g.
-        --attributes alpha 1.0 \
-        --attributes beta 1.0 \
-        --attributes transA 0 \
-        --attributes transB 0
+        --attributes alpha float32 1.0 \
+        --attributes beta float32 1.0 \
+        --attributes transA int32 0 \
+        --attributes transB int32 0
 
   --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
         Output onnx file path.
@@ -163,6 +164,7 @@ generate(
     attributes: Optional[dict]
         Specify output attributes for the OP to be generated.
         See below for the attributes that can be specified.
+        When specifying Tensor format values, specify an array converted to np.ndarray.
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
         {"attr_name1": value1, "attr_name2": value2, "attr_name3": value3, ...}
 

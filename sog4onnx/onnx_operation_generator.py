@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import json
+import sys
 import traceback
 from argparse import ArgumentParser
 import onnx
@@ -33,6 +33,33 @@ class Color:
     BG_DEFAULT     = '\033[49m'
     RESET          = '\033[0m'
 
+AVAILABLE_DTYPES = [
+    'float32',
+    'float64',
+    'int32',
+    'int64',
+    'str',
+]
+
+DTYPES_TO_ONNX_DTYPES = {
+    float: onnx.TensorProto.FLOAT,
+    int: onnx.TensorProto.INT64,
+    str: onnx.TensorProto.STRING,
+}
+
+DTYPES_TO_NUMPY_TYPES = {
+    'float32': np.float32,
+    'float64': np.float64,
+    'int32': np.int32,
+    'int64': np.int64,
+}
+
+NUMPY_TYPES_TO_ONNX_DTYPES = {
+    np.dtype('float32'): onnx.TensorProto.FLOAT,
+    np.dtype('float64'): onnx.TensorProto.DOUBLE,
+    np.dtype('int32'): onnx.TensorProto.INT32,
+    np.dtype('int64'): onnx.TensorProto.INT64,
+}
 
 def generate(
     op_type: str,
@@ -119,21 +146,62 @@ def generate(
         output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
 
     # 2. Node Generation
-    node = gs.Node(
-        op=op_type,
-        attrs=attributes,
-        inputs=input_gs_variables,
-        outputs=output_gs_variables
-    )
+    node = None
+    value_info = None
+    if op_type not in ['Constant', 'ConstantOfShape']:
+        # non constant
+        node = gs.Node(
+            op=op_type,
+            attrs=attributes,
+            inputs=input_gs_variables,
+            outputs=output_gs_variables
+        )
+    else:
+        # constant
+        for attr_name, attr_values in attributes.items():
+
+            dtype = None
+            if isinstance(attr_values, np.ndarray):
+                dtype = NUMPY_TYPES_TO_ONNX_DTYPES[attr_values.dtype]
+            else:
+                dtype = DTYPES_TO_ONNX_DTYPES[type(attr_values)]
+
+            value_info = onnx.helper.make_tensor_value_info(
+                'values',
+                dtype,
+                attr_values.shape
+            )
+            node = onnx.helper.make_node(
+                op_type,
+                inputs=[],
+                outputs=['values'],
+                value=onnx.helper.make_tensor(
+                    name=attr_name,
+                    data_type=dtype,
+                    dims=attr_values.shape,
+                    vals=attr_values,
+                ),
+            )
 
     # 3. Graph Generation
-    graph = gs.Graph(
-        nodes=[node],
-        inputs=input_gs_variables,
-        outputs=output_gs_variables,
-        opset=opset,
-    )
-    single_op_graph = gs.export_onnx(graph)
+    single_op_graph = None
+    if op_type not in ['Constant', 'ConstantOfShape']:
+        graph = gs.Graph(
+            nodes=[node],
+            inputs=input_gs_variables,
+            outputs=output_gs_variables,
+            opset=opset,
+        )
+        single_op_graph = gs.export_onnx(graph)
+    else:
+
+        graph_def = onnx.helper.make_graph(
+            nodes=[node],
+            name=op_type,
+            inputs=[],
+            outputs=[value_info],
+        )
+        single_op_graph = onnx.helper.make_model(graph_def)
 
     # 4. Graph Check
     try:
@@ -213,17 +281,18 @@ def main():
     )
     parser.add_argument(
         '--attributes',
-        nargs=2,
+        nargs=3,
         action='append',
         help=\
             'attributes can be specified multiple times. \n'+
-            '--attributes name value \n'+
+            '--attributes name dtype value \n'+
+            'dtype is one of "float32" or "float64" or "int32" or "int64" or "str". \n'+
             'https://github.com/onnx/onnx/blob/main/docs/Operators.md \n\n'+
             'e.g.\n'+
-            '--attributes alpha 1.0 \n'+
-            '--attributes beta 1.0 \n'+
-            '--attributes transA 0 \n'+
-            '--attributes transB 0'
+            '--attributes alpha float32 1.0 \n'+
+            '--attributes beta float32 1.0 \n'+
+            '--attributes transA int64 0 \n'+
+            '--attributes transB int64 0'
     )
     parser.add_argument(
         '--output_onnx_file_path',
@@ -262,7 +331,39 @@ def main():
     """
     attributes_tmp = None
     if args.attributes:
-        attributes_tmp = {attribute[0]: eval(attribute[1]) for attribute in args.attributes}
+
+        if args.op_type in ['Constant','ConstantOfShape']:
+            if len(args.attributes) > 1:
+                print(
+                    f'{Color.RED}ERROR:{Color.RESET} '+
+                    f'Only one attribute may be specified for Constant and ConstantOfShape.'
+                )
+                sys.exit(1)
+
+        attributes_tmp = {}
+        for attribute in args.attributes:
+            # parse
+            attr_name = attribute[0]
+            attr_type = attribute[1]
+            attr_value = eval(attribute[2])
+
+            # dtype check
+            if attr_type not in AVAILABLE_DTYPES:
+                print(
+                    f'{Color.RED}ERROR:{Color.RESET} '+
+                    f'The dtype that can be specified for attributes is one of the {AVAILABLE_DTYPES}. \n'+
+                    f'dtype:{attr_type}'
+                )
+                sys.exit(1)
+
+            # Conversion from python types to numpy types
+            # However, only if the input values are in list format
+            # Constant(value), ConstantOfShape
+            if (args.op_type == 'Constant' and attr_name in ['sparse_value', 'value']) or (args.op_type == 'ConstantOfShape'):
+                if isinstance(attr_value, list):
+                    attr_value = np.asarray(attr_value, dtype=DTYPES_TO_NUMPY_TYPES[attr_type])
+
+            attributes_tmp[attr_name] = attr_value
 
     # output_onnx_file_path
     output_onnx_file_path = ''
