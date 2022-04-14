@@ -263,6 +263,22 @@ $ sog4onnx \
 ![image](https://user-images.githubusercontent.com/33194443/163042479-9998ba73-ee26-44ea-bd6b-dcd04539190b.png)
 ![image](https://user-images.githubusercontent.com/33194443/163042529-5dbd1b5f-e8d1-47d0-8a9e-aacd91539c2b.png)
 
+### 6-3. opset=11, NonMaxSuppression
+```bash
+$ sog4onnx \
+--op_type NonMaxSuppression \
+--opset 11 \
+--input_variables boxes float32 [1,6,4] \
+--input_variables scores float32 [1,1,6] \
+--input_variables max_output_boxes_per_class int64 [1] \
+--input_variables iou_threshold float32 [1] \
+--input_variables score_threshold float32 [1] \
+--output_variables selected_indices int64 [3,3] \
+--attributes center_point_box 1
+```
+![image](https://user-images.githubusercontent.com/33194443/163291737-8bd7ad7e-f9e5-4ce9-a8ba-444f1a8e77bb.png)
+![image](https://user-images.githubusercontent.com/33194443/163291789-59e4e5c8-26f4-4971-ab22-1486093f1be0.png)
+
 ## 7. Reference
 1. https://github.com/onnx/onnx/blob/main/docs/Operators.md
 2. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
