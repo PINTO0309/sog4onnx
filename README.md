@@ -201,10 +201,10 @@ $ sog4onnx \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
 --output_variables o1 float32 [1,2,3] \
---attributes alpha 1.0 \
---attributes beta 1.0 \
---attributes transA 0 \
---attributes transB 0
+--attributes alpha float32 1.0 \
+--attributes beta float32 1.0 \
+--attributes transA int32 0 \
+--attributes transB int32 0
 ```
 
 ## 5. In-script Execution
