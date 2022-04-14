@@ -281,6 +281,24 @@ $ sog4onnx \
 ![image](https://user-images.githubusercontent.com/33194443/163291737-8bd7ad7e-f9e5-4ce9-a8ba-444f1a8e77bb.png)
 ![image](https://user-images.githubusercontent.com/33194443/163291789-59e4e5c8-26f4-4971-ab22-1486093f1be0.png)
 
+### 6-4. opset=11, Constant
+```bash
+$ sog4onnx \
+--op_type Constant \
+--opset 11 \
+--output_variables output float32 [1,6,4] \
+--attributes value float32 \
+[[\
+[0.5,0.5,1.0,1.0],\
+[0.5,0.6,1.0,1.0],\
+[0.5,0.4,1.0,1.0],\
+[0.5,10.5,1.0,1.0],\
+[0.5,10.6,1.0,1.0],\
+[0.5,100.5,1.0,1.0]\
+]]
+```
+![image](https://user-images.githubusercontent.com/33194443/163309028-ef1885be-853c-4620-a27f-d70c48fff26f.png)
+
 ## 7. Reference
 1. https://github.com/onnx/onnx/blob/main/docs/Operators.md
 2. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
