@@ -62,7 +62,7 @@ optional arguments:
   --opset OPSET
         ONNX opset number.
 
-  --input_variables NAME TYPE VALUE
+  --input_variables NAME DTYPE VALUE
         input_variables can be specified multiple times.
         --input_variables variable_name numpy.dtype shape
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
@@ -72,7 +72,7 @@ optional arguments:
         --input_variables i2 int32 [1] \
         --input_variables i3 float64 [1,3,224,224]
 
-  --output_variables NAME TYPE VALUE
+  --output_variables NAME DTYPE VALUE
         output_variables can be specified multiple times.
         --output_variables variable_name numpy.dtype shape
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
