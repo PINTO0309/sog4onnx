@@ -209,6 +209,7 @@ $ sog4onnx \
 
 ## 5. In-script Execution
 ```python
+import numpy as np
 from sog4onnx import generate
 
 single_op_graph = generate(
@@ -243,10 +244,10 @@ $ sog4onnx \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
 --output_variables o1 float32 [1,2,3] \
---attributes alpha 1.0 \
---attributes beta 1.0 \
---attributes transA 0 \
---attributes transB 0
+--attributes alpha float32 1.0 \
+--attributes beta float32 1.0 \
+--attributes transA int32 0 \
+--attributes transB int32 0
 --non_verbose
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163018526-f2d5c647-c3e9-4e65-9b9a-c1c4fa5da8a5.png)
