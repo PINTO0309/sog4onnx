@@ -45,6 +45,7 @@ $ sog4onnx -h
 usage: sog4onnx [-h]
   --op_type OP_TYPE
   --opset OPSET
+  --op_name OP_NAME
   [--input_variables NAME TYPE VALUE]
   [--output_variables NAME TYPE VALUE]
   [--attributes NAME DTYPE VALUE]
@@ -61,6 +62,9 @@ optional arguments:
 
   --opset OPSET
         ONNX opset number.
+
+  --op_name OP_NAME
+        OP name.
 
   --input_variables NAME DTYPE VALUE
         input_variables can be specified multiple times.
@@ -114,6 +118,7 @@ Help on function generate in module sog4onnx.onnx_operation_generator:
 generate(
   op_type: str,
   opset: int,
+  op_name: str,
   input_variables: dict,
   output_variables: dict,
   attributes: Union[dict, NoneType] = None,
@@ -134,6 +139,9 @@ generate(
         ONNX opset number.
 
         e.g. 11
+
+    op_name: str
+        OP name.
 
     input_variables: Optional[dict]
         Specify input variables for the OP to be generated.
@@ -197,6 +205,7 @@ generate(
 $ sog4onnx \
 --op_type Gemm \
 --opset 1 \
+--op_name gemm_custom1 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
@@ -215,6 +224,7 @@ from sog4onnx import generate
 single_op_graph = generate(
     op_type = 'Gemm',
     opset = 1,
+    op_name = "gemm_custom1",
     input_variables = {
       "i1": [np.float32, [1,2,3]],
       "i2": [np.float32, [1,1]],
@@ -240,6 +250,7 @@ single_op_graph = generate(
 $ sog4onnx \
 --op_type Gemm \
 --opset 1 \
+--op_name gemm_custom1 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,1] \
 --input_variables i3 int32 [0] \
@@ -258,6 +269,7 @@ $ sog4onnx \
 $ sog4onnx \
 --op_type Add \
 --opset 11 \
+--op_name add_custom1 \
 --input_variables i1 float32 [1,2,3] \
 --input_variables i2 float32 [1,2,3] \
 --output_variables o1 float32 [1,2,3] \
@@ -271,6 +283,7 @@ $ sog4onnx \
 $ sog4onnx \
 --op_type NonMaxSuppression \
 --opset 11 \
+--op_name nms_custom1 \
 --input_variables boxes float32 [1,6,4] \
 --input_variables scores float32 [1,1,6] \
 --input_variables max_output_boxes_per_class int64 [1] \
@@ -287,6 +300,7 @@ $ sog4onnx \
 $ sog4onnx \
 --op_type Constant \
 --opset 11 \
+--op_name const_custom1 \
 --output_variables boxes float32 [1,6,4] \
 --attributes value float32 \
 [[\

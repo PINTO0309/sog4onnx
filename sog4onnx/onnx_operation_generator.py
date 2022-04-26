@@ -64,6 +64,7 @@ NUMPY_TYPES_TO_ONNX_DTYPES = {
 def generate(
     op_type: str,
     opset: int,
+    op_name: str,
     input_variables: Optional[dict] = None,
     output_variables: Optional[dict] = None,
     attributes: Optional[dict] = None,
@@ -82,6 +83,9 @@ def generate(
     opset: int
         ONNX opset number.\n\
         e.g. 11
+
+    op_name: str
+        OP name.
 
     input_variables: Optional[dict]
         Specify input variables for the OP to be generated.\n\
@@ -152,6 +156,7 @@ def generate(
         # non constant
         node = gs.Node(
             op=op_type,
+            name=op_name,
             attrs=attributes,
             inputs=input_gs_variables,
             outputs=output_gs_variables
@@ -176,6 +181,7 @@ def generate(
                 op_type,
                 inputs=[],
                 outputs=[constant_name],
+                name=op_name,
                 value=onnx.helper.make_tensor(
                     name='value',
                     data_type=dtype,
@@ -243,10 +249,17 @@ def main():
         required=True,
         help='ONNX opset number.'
     )
+    parser.add_argument(
+        '--op_name',
+        type=str,
+        required=True,
+        help='OP name.'
+    )
     """
     python3 onnx_operation_generator.py \
     --op_type Gemm \
     --opset 11 \
+    --op_name gemm_custom1 \
     --input_variables i1 np.float32 [1,2,3] \
     --input_variables i2 np.float32 [1,1] \
     --input_variables i3 np.float32 0 \
@@ -377,6 +390,7 @@ def main():
     single_op_graph = generate(
         op_type=args.op_type,
         opset=args.opset,
+        op_name=args.op_name,
         input_variables=input_variables_tmp,
         output_variables=output_variables_tmp,
         attributes=attributes_tmp,
