@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import sys
+import ast
 import traceback
 from argparse import ArgumentParser
 import onnx
@@ -329,7 +330,7 @@ def main():
     """
     input_variables_tmp = None
     if args.input_variables:
-        input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), eval(input_variable[2])] for input_variable in args.input_variables}
+        input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), ast.literal_eval(input_variable[2])] for input_variable in args.input_variables}
 
     # output variables
     """
@@ -337,7 +338,7 @@ def main():
     """
     output_variables_tmp = None
     if args.output_variables:
-        output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), eval(output_variable[2])] for output_variable in args.output_variables}
+        output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), ast.literal_eval(output_variable[2])] for output_variable in args.output_variables}
 
     # attributes
     """
@@ -359,7 +360,7 @@ def main():
             # parse
             attr_name = attribute[0]
             attr_type = attribute[1]
-            attr_value = eval(attribute[2])
+            attr_value = ast.literal_eval(attribute[2])
 
             # dtype check
             if attr_type not in AVAILABLE_DTYPES:
