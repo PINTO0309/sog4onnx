@@ -37,69 +37,69 @@ https://github.com/PINTO0309/simple-onnx-processing-tools#docker
 $ sog4onnx -h
 
 usage: sog4onnx [-h]
-  --op_type OP_TYPE
-  --opset OPSET
-  --op_name OP_NAME
-  [--input_variables NAME TYPE VALUE]
-  [--output_variables NAME TYPE VALUE]
-  [--attributes NAME DTYPE VALUE]
-  [--output_onnx_file_path OUTPUT_ONNX_FILE_PATH]
-  [--non_verbose]
+  --ot OP_TYPE
+  --os OPSET
+  --on OP_NAME
+  [-iv NAME TYPE VALUE]
+  [-ov NAME TYPE VALUE]
+  [-a NAME DTYPE VALUE]
+  [-of OUTPUT_ONNX_FILE_PATH]
+  [-n]
 
 optional arguments:
   -h, --help
-        show this help message and exit
+    show this help message and exit
 
-  --op_type OP_TYPE
-        ONNX OP type.
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md
+  -ot OP_TYPE, --op_type OP_TYPE
+    ONNX OP type.
+    https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-  --opset OPSET
-        ONNX opset number.
+  -os OPSET, --opset OPSET
+    ONNX opset number.
 
-  --op_name OP_NAME
-        OP name.
+  -on OP_NAME, --op_name OP_NAME
+    OP name.
 
-  --input_variables NAME DTYPE VALUE
-        input_variables can be specified multiple times.
-        --input_variables variable_name numpy.dtype shape
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md
+  -iv INPUT_VARIABLES INPUT_VARIABLES INPUT_VARIABLES, --input_variables INPUT_VARIABLES INPUT_VARIABLES INPUT_VARIABLES
+    input_variables can be specified multiple times.
+    --input_variables variable_name numpy.dtype shape
+    https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-        e.g.
-        --input_variables i1 float32 [1,3,5,5] \
-        --input_variables i2 int32 [1] \
-        --input_variables i3 float64 [1,3,224,224]
+    e.g.
+    --input_variables i1 float32 [1,3,5,5] \
+    --input_variables i2 int32 [1] \
+    --input_variables i3 float64 [1,3,224,224]
 
-  --output_variables NAME DTYPE VALUE
-        output_variables can be specified multiple times.
-        --output_variables variable_name numpy.dtype shape
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md
+  -ov OUTPUT_VARIABLES OUTPUT_VARIABLES OUTPUT_VARIABLES, --output_variables OUTPUT_VARIABLES OUTPUT_VARIABLES OUTPUT_VARIABLES
+    output_variables can be specified multiple times.
+    --output_variables variable_name numpy.dtype shape
+    https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-        e.g.
-        --output_variables o1 float32 [1,3,5,5] \
-        --output_variables o2 int32 [1] \
-        --output_variables o3 float64 [1,3,224,224]
+    e.g.
+    --output_variables o1 float32 [1,3,5,5] \
+    --output_variables o2 int32 [1] \
+    --output_variables o3 float64 [1,3,224,224]
 
-  --attributes NAME DTYPE VALUE
-        attributes can be specified multiple times.
-        dtype is one of "float32" or "float64" or "int32" or "int64" or "str".
-        --attributes name dtype value
-        https://github.com/onnx/onnx/blob/main/docs/Operators.md
+  -a ATTRIBUTES ATTRIBUTES ATTRIBUTES, --attributes ATTRIBUTES ATTRIBUTES ATTRIBUTES
+    attributes can be specified multiple times.
+    dtype is one of "float32" or "float64" or "int32" or "int64" or "str".
+    --attributes name dtype value
+    https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-        e.g.
-        --attributes alpha float32 1.0 \
-        --attributes beta float32 1.0 \
-        --attributes transA int32 0 \
-        --attributes transB int32 0
+    e.g.
+    --attributes alpha float32 1.0 \
+    --attributes beta float32 1.0 \
+    --attributes transA int32 0 \
+    --attributes transB int32 0
 
-  --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
-        Output onnx file path.
-        If not specified, a file with the OP type name is generated.
+  -of OUTPUT_ONNX_FILE_PATH, --output_onnx_file_path OUTPUT_ONNX_FILE_PATH
+    Output onnx file path.
+    If not specified, a file with the OP type name is generated.
 
-        e.g. op_type="Gemm" -> Gemm.onnx
+    e.g. op_type="Gemm" -> Gemm.onnx
 
-  --non_verbose
-        Do not show all information logs. Only error logs are displayed.
+  -n, --non_verbose
+    Do not show all information logs. Only error logs are displayed.
 ```
 
 ## 3. In-script Usage

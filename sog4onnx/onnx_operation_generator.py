@@ -236,6 +236,7 @@ def main():
     # https://github.com/onnx/onnx/blob/main/docs/Operators.md
     parser = ArgumentParser()
     parser.add_argument(
+        '-ot',
         '--op_type',
         type=str,
         required=True,
@@ -245,12 +246,14 @@ def main():
             'https://github.com/onnx/onnx/blob/main/docs/Operators.md'
     )
     parser.add_argument(
+        '-os',
         '--opset',
         type=int,
         required=True,
         help='ONNX opset number.'
     )
     parser.add_argument(
+        '-on',
         '--op_name',
         type=str,
         required=True,
@@ -267,6 +270,7 @@ def main():
     --attributes "{\"alpha\": 1.0, \"beta\": 1.0, \"transA\": 0, \"transB\": 0}"
     """
     parser.add_argument(
+        '-iv',
         '--input_variables',
         type=str,
         nargs=3,
@@ -281,6 +285,7 @@ def main():
             '--input_variables i3 float64 [1,3,224,224]'
     )
     parser.add_argument(
+        '-ov',
         '--output_variables',
         type=str,
         nargs=3,
@@ -295,6 +300,7 @@ def main():
             '--output_variables o3 float64 [1,3,224,224]'
     )
     parser.add_argument(
+        '-a',
         '--attributes',
         nargs=3,
         action='append',
@@ -310,6 +316,7 @@ def main():
             '--attributes transB int64 0'
     )
     parser.add_argument(
+        '-of',
         '--output_onnx_file_path',
         type=str,
         default='',
@@ -318,6 +325,7 @@ def main():
             'e.g. op_type="Gemm" -> Gemm.onnx'
     )
     parser.add_argument(
+        '-n',
         '--non_verbose',
         action='store_true',
         help='Do not show all information logs. Only error logs are displayed.'
