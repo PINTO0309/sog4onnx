@@ -202,14 +202,20 @@ def generate(
         )
         single_op_graph = gs.export_onnx(graph)
     else:
-
         graph_def = onnx.helper.make_graph(
             nodes=[node],
             name=op_type,
             inputs=[],
             outputs=[value_info],
         )
-        single_op_graph = onnx.helper.make_model(graph_def)
+        opset_id_proto = onnx.helper.make_opsetid(
+            domain='',
+            version=opset,
+        )
+        single_op_graph = onnx.helper.make_model(
+            graph=graph_def,
+            opset_imports=[opset_id_proto],
+        )
 
     # 4. Graph Check
     try:
