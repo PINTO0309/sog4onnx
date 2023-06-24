@@ -8,6 +8,7 @@ import onnx
 import onnx_graphsurgeon as gs
 import numpy as np
 from typing import Optional
+from collections import OrderedDict
 
 class Color:
     BLACK          = '\033[30m'
@@ -40,6 +41,7 @@ AVAILABLE_DTYPES = [
     'int32',
     'int64',
     'str',
+    'bool',
 ]
 
 DTYPES_TO_ONNX_DTYPES = {
@@ -53,6 +55,7 @@ DTYPES_TO_NUMPY_TYPES = {
     'float64': np.float64,
     'int32': np.int32,
     'int64': np.int64,
+    'bool': np.bool_
 }
 
 NUMPY_TYPES_TO_ONNX_DTYPES = {
@@ -60,15 +63,16 @@ NUMPY_TYPES_TO_ONNX_DTYPES = {
     np.dtype('float64'): onnx.TensorProto.DOUBLE,
     np.dtype('int32'): onnx.TensorProto.INT32,
     np.dtype('int64'): onnx.TensorProto.INT64,
+    np.dtype('bool_'): onnx.TensorProto.BOOL,
 }
 
 def generate(
     op_type: str,
     opset: int,
     op_name: str,
-    input_variables: Optional[dict] = None,
-    output_variables: Optional[dict] = None,
-    attributes: Optional[dict] = None,
+    input_variables: Optional[OrderedDict] = None,
+    output_variables: Optional[OrderedDict] = None,
+    attributes: Optional[OrderedDict] = None,
     output_onnx_file_path: Optional[str] = '',
     non_verbose: Optional[bool] = False,
 ) -> onnx.ModelProto:
@@ -88,21 +92,21 @@ def generate(
     op_name: str
         OP name.
 
-    input_variables: Optional[dict]
+    input_variables: Optional[OrderedDict]
         Specify input variables for the OP to be generated.\n\
         See below for the variables that can be specified.\n\n\
         {"input_var_name1": [numpy.dtype, shape], "input_var_name2": [dtype, shape], ...}\n\n\
         e.g. input_variables = {"name1": [np.float32, [1,224,224,3]], "name2": [np.bool_, [0]], ...}\n\
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-    output_variables: Optional[dict]
+    output_variables: Optional[OrderedDict]
         Specify output variables for the OP to be generated.\n\
         See below for the variables that can be specified.\n\n\
         {"output_var_name1": [numpy.dtype, shape], "output_var_name2": [dtype, shape], ...}\n\n\
         e.g. output_variables = {"name1": [np.float32, [1,224,224,3]], "name2": [np.bool_, [0]], ...}\n\
         https://github.com/onnx/onnx/blob/main/docs/Operators.md
 
-    attributes: Optional[dict]
+    attributes: Optional[OrderedDict]
         Specify output attributes for the OP to be generated.\n\
         See below for the attributes that can be specified.\n\n\
         {"attr_name1": value1, "attr_name2": value2, "attr_name3": value3, ...}\n\n\
@@ -136,7 +140,9 @@ def generate(
     """
     input_gs_variables = None
     if input_variables:
-        input_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()]
+        input_gs_variables = [
+            gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in input_variables.items()
+        ]
 
     """
     output_gs_variables
@@ -148,7 +154,9 @@ def generate(
     """
     output_gs_variables = None
     if output_variables:
-        output_gs_variables = [gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()]
+        output_gs_variables = [
+            gs.Variable(name=key, dtype=value[0], shape=value[1]) for key, value in output_variables.items()
+        ]
 
     # 2. Node Generation
     node = None
@@ -219,12 +227,16 @@ def generate(
 
     # 4. Graph Check
     try:
-        onnx.checker.check_model(
-            model=single_op_graph,
-            full_check=False
-        )
-        if not non_verbose:
-            print(f'{Color.GREEN}INFO:{Color.RESET} The model is checked!')
+        if not op_type.endswith('_TRT'):
+            onnx.checker.check_model(
+                model=single_op_graph,
+                full_check=False
+            )
+            if not non_verbose:
+                print(f'{Color.GREEN}INFO:{Color.RESET} The model is checked!')
+        else:
+            if not non_verbose:
+                print(f'{Color.GREEN}INFO:{Color.RESET} Model checker was skipped due to OP regarding TRT plugin.')
 
     except Exception as e:
         tracetxt = traceback.format_exc().splitlines()[-1]
@@ -344,7 +356,10 @@ def main():
     """
     input_variables_tmp = None
     if args.input_variables:
-        input_variables_tmp = {input_variable[0]: [getattr(np, input_variable[1]), ast.literal_eval(input_variable[2])] for input_variable in args.input_variables}
+        input_variables_tmp = \
+            OrderedDict(
+                {input_variable[0]: [getattr(np, input_variable[1]), ast.literal_eval(input_variable[2])] for input_variable in args.input_variables}
+            )
 
     # output variables
     """
@@ -352,7 +367,10 @@ def main():
     """
     output_variables_tmp = None
     if args.output_variables:
-        output_variables_tmp = {output_variable[0]: [getattr(np, output_variable[1]), ast.literal_eval(output_variable[2])] for output_variable in args.output_variables}
+        output_variables_tmp = \
+            OrderedDict(
+                {output_variable[0]: [getattr(np, output_variable[1]), ast.literal_eval(output_variable[2])] for output_variable in args.output_variables}
+            )
 
     # attributes
     """
@@ -369,7 +387,7 @@ def main():
                 )
                 sys.exit(1)
 
-        attributes_tmp = {}
+        attributes_tmp = OrderedDict({})
         for attribute in args.attributes:
             # parse
             attr_name = attribute[0]

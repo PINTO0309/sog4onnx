@@ -308,6 +308,28 @@ $ sog4onnx \
 ```
 ![image](https://user-images.githubusercontent.com/33194443/163311192-b559134f-d42d-4119-8990-0f7ac63230e3.png)
 
+### 6-5. opset=11, EfficientNMS_TRT (TensorRT Efficient NMS Plugin)
+```bash
+$ sog4onnx \
+--op_type EfficientNMS_TRT \
+--opset 11 \
+--op_name trt_nms_efficient_std_11 \
+--input_variables boxes float32 [1,3549,4] \
+--input_variables scores float32 [1,3549,16] \
+--attributes plugin_version str 1 \
+--attributes score_threshold float32 0.25 \
+--attributes iou_threshold float32 0.45 \
+--attributes max_output_boxes int64 20 \
+--attributes background_class int64 -1 \
+--attributes score_activation bool False \
+--attributes box_coding int64 0 \
+--output_variables num_detections int32 [1,1] \
+--output_variables detection_boxes float32 [1,20,4] \
+--output_variables detection_scores float32 [1,20] \
+--output_variables detection_classes int32 [1,20]
+```
+![image](https://github.com/PINTO0309/sog4onnx/assets/33194443/1b3989fd-cd73-4b1e-af59-cda25ea61a97)
+
 ## 7. Reference
 1. https://github.com/onnx/onnx/blob/main/docs/Operators.md
 2. https://docs.nvidia.com/deeplearning/tensorrt/onnx-graphsurgeon/docs/index.html
