@@ -39,6 +39,7 @@ $ sog4onnx -h
 usage: sog4onnx [-h]
   --ot OP_TYPE
   --os OPSET
+  --ir IR_VERSION
   --on OP_NAME
   [-iv NAME TYPE VALUE]
   [-ov NAME TYPE VALUE]
@@ -56,6 +57,9 @@ optional arguments:
 
   -os OPSET, --opset OPSET
     ONNX opset number.
+
+  -ir IR_VERSION, --ir_version IR_VERSION
+    ONNX ir_version number.
 
   -on OP_NAME, --op_name OP_NAME
     OP name.
@@ -112,6 +116,7 @@ Help on function generate in module sog4onnx.onnx_operation_generator:
 generate(
   op_type: str,
   opset: int,
+  ir_version: int,
   op_name: str,
   input_variables: dict,
   output_variables: dict,
@@ -133,6 +138,11 @@ generate(
         ONNX opset number.
 
         e.g. 11
+
+    ir_version: int
+        ONNX ir_version number.
+
+        e.g. 9
 
     op_name: str
         OP name.
