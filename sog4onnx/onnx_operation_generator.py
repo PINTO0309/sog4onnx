@@ -70,6 +70,7 @@ def generate(
     op_type: str,
     opset: int,
     op_name: str,
+    ir_version: int = 9,
     input_variables: Optional[OrderedDict] = None,
     output_variables: Optional[OrderedDict] = None,
     attributes: Optional[OrderedDict] = None,
@@ -88,6 +89,10 @@ def generate(
     opset: int
         ONNX opset number.\n\
         e.g. 11
+
+    ir_version: int
+        ONNX ir_version number.\n\
+        e.g. 9
 
     op_name: str
         OP name.
@@ -208,7 +213,7 @@ def generate(
             outputs=output_gs_variables,
             opset=opset,
         )
-        single_op_graph = gs.export_onnx(graph)
+        single_op_graph = gs.export_onnx(graph, do_type_check=False, **{'ir_version': ir_version})
     else:
         graph_def = onnx.helper.make_graph(
             nodes=[node],
@@ -223,6 +228,7 @@ def generate(
         single_op_graph = onnx.helper.make_model(
             graph=graph_def,
             opset_imports=[opset_id_proto],
+            ir_version=ir_version,
         )
 
     # 4. Graph Check
@@ -269,6 +275,13 @@ def main():
         type=int,
         required=True,
         help='ONNX opset number.'
+    )
+    parser.add_argument(
+        '-ir',
+        '--ir_version',
+        type=int,
+        default=9,
+        help='ONNX ir_version number.'
     )
     parser.add_argument(
         '-on',
@@ -457,6 +470,7 @@ def main():
     single_op_graph = generate(
         op_type=args.op_type,
         opset=args.opset,
+        ir_version=args.ir_version,
         op_name=args.op_name,
         input_variables=input_variables_tmp,
         output_variables=output_variables_tmp,
